@@ -1,5 +1,5 @@
 const path = require("path");
-
+const HtmlWebPackPlugin = require("Html-webpack-plugin");
 exports = {
   mode: "development",
   entry: {
@@ -42,4 +42,11 @@ exports = {
       },
     ],
   },
+  plugins: [
+    new HtmlWebPackPlugin({
+      title: "Mapty-Map",
+      filename: "index.html",
+      template: "src/template.html",
+    }),
+  ],
 };
