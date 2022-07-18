@@ -1,21 +1,21 @@
 const path = require("path");
-const HtmlWebPackPlugin = require("Html-webpack-plugin");
-exports = {
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+module.exports = {
   mode: "development",
   entry: {
-    bundle: path.resolve(__dirname, "src/index.ts"),
+    bundle: path.resolve(__dirname, "src/script/index.ts"),
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name].[contenthash].js",
     clean: true,
+    filename: "[name].[contenthash].js",
     assetModuleFilename: "[name][ext]",
   },
   resolve: { extensions: [".ts", ".tsx", ".js"] },
-  devTool: "source-map",
+  devtool: "source-map",
   devServer: {
     static: { directory: path.resolve(__dirname, "dist") },
-    port: 3001,
+    port: 5002,
     open: true,
     hot: true,
     compress: true,
