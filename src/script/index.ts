@@ -1,10 +1,12 @@
+import "../assets/scss/style.scss";
+
 type CurrentLocation = {
   Latitude: number;
   Longitude: number;
 };
 
 class UserLocation {
-  constructor(public Latitude?: number, public Longitude?: number) {
+  constructor(private Latitude?: number, private Longitude?: number) {
     this.Latitude = Latitude;
     this.Longitude = Longitude;
   }
@@ -15,7 +17,7 @@ class UserLocation {
       return;
     } else {
       navigator.geolocation.getCurrentPosition(
-        this.onSuccess,
+        this.onSuccess.bind(this),
         this.onError,
         this.getOptions()
       );
@@ -23,13 +25,15 @@ class UserLocation {
   }
 
   private getOptions(): PositionOptions {
+    console.log("getOptions :::", this);
     return { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
   }
 
-  private onSuccess(pos: GeolocationPosition) {
+  private onSuccess(pos: GeolocationPosition): void {
     const coord = pos.coords;
-    this.location.Latitude = <number>coord.latitude;
-    this.location.Longitude = <number>coord.longitude;
+
+    this.Latitude = <number>coord.latitude;
+    this.Longitude = <number>coord.longitude;
   }
 
   private onError(): void {
@@ -45,5 +49,6 @@ class UserLocation {
 }
 
 window.addEventListener("load", () => {
-  new UserLocation();
+  const loc = new UserLocation();
+  loc.getCurrentLocation();
 });

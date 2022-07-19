@@ -1,0 +1,9 @@
+.mapty {
+  margin: 20px;
+  &__sidebar {
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 400px;
+  }
+}
