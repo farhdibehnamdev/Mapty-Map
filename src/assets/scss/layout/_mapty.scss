@@ -1,9 +1,13 @@
 .mapty {
   margin: 20px;
+  display: flex;
+  align-items: center;
   &__sidebar {
     background-color: var(--background);
-    display: flex;
-    flex-direction: column;
     flex: 0 1 400px;
   }
+}
+#map {
+  height: 700px;
+  width: 800px;
 }

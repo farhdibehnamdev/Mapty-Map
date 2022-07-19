@@ -19,19 +19,8 @@
       rel="stylesheet"
       crossorigin="anonymous"
     />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-      crossorigin="anonymous"
-    />
-    <script
-      defer
-      src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
-      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-      crossorigin=""
-    ></script>
   </head>
+
   <body>
     <div class="mapty">
       <aside class="mapty__sidebar">
@@ -39,8 +28,8 @@
           <img src="./assets/images/logo.png" alt="logo" />
         </div>
         <div class="mapty__workout-box">
-          <form>
-            <div>
+          <form class="mapty__form">
+            <div class="mapty__form-group">
               <label>Type</label>
               <select class="mapty__type-workout">
                 <option value="running" selected>Running</option>
@@ -49,7 +38,7 @@
               <label>Distance</label>
               <input class="distance" type="text" />
             </div>
-            <div>
+            <div class="mapty__form-group">
               <label>Duration</label>
               <input type="text" class="duration" />
               <label>Cadence</label>

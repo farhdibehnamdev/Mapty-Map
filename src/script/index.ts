@@ -1,3 +1,4 @@
+import "../../node_modules/leaflet/dist/leaflet.css";
 import "../assets/scss/style.scss";
 import LeafletMap from "./map";
 type CurrentLocation = {
