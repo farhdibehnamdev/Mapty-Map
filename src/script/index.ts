@@ -1,6 +1,9 @@
 import "../../node_modules/leaflet/dist/leaflet.css";
 import "../assets/scss/style.scss";
+import logo from "../assets/images/logo.png";
 import LeafletMap from "./map";
+const lg = <HTMLImageElement>document.querySelector(".mapty__logo");
+lg.src = logo;
 type CurrentLocation = {
   Latitude: number;
   Longitude: number;
