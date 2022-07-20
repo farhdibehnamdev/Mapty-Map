@@ -1,13 +1,52 @@
 .mapty {
-  margin: 20px;
+  padding: 2rem;
   display: flex;
-  align-items: center;
+  overscroll-behavior-y: none;
+  height: 100vh;
+
   &__sidebar {
     background-color: var(--background);
-    flex: 0 1 400px;
+    flex-basis: 50rem;
+    display: flex;
+    padding: 3rem 5rem 4rem 5rem;
+    flex-direction: column;
+  }
+  &__logo {
+    height: 5.2rem;
+    align-self: center;
+    margin-bottom: 4rem;
+  }
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 2.5rem;
+    background-color: var(--workout-color);
+    padding: 1.5rem 2.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.75rem;
+    height: 9.25rem;
+  }
+  &__row {
+    display: flex;
+    align-items: center;
+  }
+  &__label {
+    flex: 0 0 50%;
+    font-weight: 600;
+  }
+  &__form-control {
+    width: 100%;
+    padding: 0.3rem 1.1rem;
+    font-family: inherit;
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 3px;
+    background-color: var(--form-control-color);
+    transition: all 0.2s;
   }
 }
+
 #map {
-  height: 700px;
-  width: 800px;
+  width: inherit;
+  height: auto;
 }

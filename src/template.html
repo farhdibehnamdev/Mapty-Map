@@ -24,25 +24,39 @@
   <body>
     <div class="mapty">
       <aside class="mapty__sidebar">
-        <div class="mapty__icon">
-          <img src="./assets/images/logo.png" alt="logo" />
-        </div>
+        <img alt="logo" class="mapty__logo" />
         <div class="mapty__workout-box">
           <form class="mapty__form">
-            <div class="mapty__form-group">
-              <label>Type</label>
-              <select class="mapty__type-workout">
+            <div class="mapty__row">
+              <label class="mapty__label">Type</label>
+              <select class="mapty__type-workout mapty__form-control">
                 <option value="running" selected>Running</option>
                 <option value="cycling">Cycling</option>
               </select>
-              <label>Distance</label>
-              <input class="distance" type="text" />
             </div>
-            <div class="mapty__form-group">
-              <label>Duration</label>
-              <input type="text" class="duration" />
-              <label>Cadence</label>
-              <input type="text" class="Cadence" />
+            <div class="mapty__row">
+              <label class="mapty__label">Distance</label>
+              <input
+                class="mapty__distance mapty__form-control"
+                type="text"
+                placeholder="km"
+              />
+            </div>
+            <div class="mapty__row">
+              <label class="mapty__label">Duration</label>
+              <input
+                type="text"
+                class="mapty__duration mapty__form-control"
+                placeholder="min"
+              />
+            </div>
+            <div class="mapty__row">
+              <label class="mapty__label">Cadence</label>
+              <input
+                type="text"
+                class="mapty__cadence mapty__form-control"
+                placeholder="step/min"
+              />
             </div>
           </form>
         </div>
