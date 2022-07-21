@@ -1,3 +1,16 @@
+@mixin custom-workout($value) {
+  display: grid;
+  gap: 0.5rem 2.5rem;
+  background-color: var(--workout-color);
+  padding: 1.5rem 2.75rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.75rem;
+  height: 9.25rem;
+  grid-template-columns: $value;
+}
+@mixin border-color($value) {
+  border-left: 3px solid var($value);
+}
 .mapty {
   padding: 2rem;
   display: flex;
@@ -17,14 +30,7 @@
     margin-bottom: 4rem;
   }
   &__form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem 2.5rem;
-    background-color: var(--workout-color);
-    padding: 1.5rem 2.75rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1.75rem;
-    height: 9.25rem;
+    @include custom-workout(1fr 1fr);
   }
   &__row {
     display: flex;
@@ -44,9 +50,41 @@
     background-color: var(--form-control-color);
     transition: all 0.2s;
   }
+  &__main {
+    height: 100%;
+    flex: 1;
+  }
+}
+.workout {
+  @include custom-workout(1fr 1fr 1fr 1fr);
+  &__title {
+    grid-column: 1/-1;
+  }
+  &__details {
+    display: flex;
+    align-items: baseline;
+    font-size: 1.5rem;
+    color: #fff;
+  }
+  &__value {
+    margin-right: 0.5rem;
+    font-weight: 600;
+  }
+  &__unit {
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #aaa;
+  }
 }
 
+.workout--running {
+  @include border-color(--color-brand--2);
+}
+.workout--cycling {
+  @include border-color(--color-brand--1);
+}
 #map {
-  width: inherit;
-  height: auto;
+  height: inherit;
+  flex: inherit;
 }
