@@ -4,7 +4,7 @@ module.exports = {
   mode: "development",
   entry: {
     bundle: [
-      path.resolve(__dirname, "src/script/index.ts"),
+      path.resolve(__dirname, "src/script/app.ts"),
       path.resolve(__dirname, "src/script/map.ts"),
     ],
   },
