@@ -85,6 +85,9 @@
 .workout--cycling {
   @include border-color(--color-brand--1);
 }
+.hidden {
+  display: none;
+}
 #map {
   height: inherit;
   flex: inherit;
