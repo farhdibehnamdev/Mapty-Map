@@ -26,7 +26,7 @@
       <aside class="mapty__sidebar">
         <img alt="logo" class="mapty__logo" />
         <div class="mapty__workout-box">
-          <form class="mapty__form hidden">
+          <form id="form" class="mapty__form hidden">
             <div class="mapty__row">
               <label class="mapty__label">Type</label>
               <select class="mapty__type-workout mapty__form-control">
@@ -37,6 +37,7 @@
             <div class="mapty__row">
               <label class="mapty__label">Distance</label>
               <input
+                name="km"
                 class="mapty__distance mapty__form-control"
                 type="text"
                 placeholder="km"
@@ -45,6 +46,7 @@
             <div class="mapty__row">
               <label class="mapty__label">Duration</label>
               <input
+                name="min"
                 type="text"
                 class="mapty__duration mapty__form-control"
                 placeholder="min"
@@ -53,11 +55,13 @@
             <div class="mapty__row">
               <label class="mapty__label">Cadence</label>
               <input
+                name="step"
                 type="text"
                 class="mapty__cadence mapty__form-control"
                 placeholder="step/min"
               />
             </div>
+            <button class="mapty__btn">OK</button>
           </form>
           <div class="workout workout--running hidden">
             <h2 class="workout__title">Running on July 30</h2>

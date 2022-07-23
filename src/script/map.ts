@@ -1,6 +1,6 @@
 import L, { Map } from "leaflet";
 
-const form = <HTMLElement>document.querySelector(".mapty__form");
+const form = <HTMLFormElement>document.querySelector("#form");
 const distance = <HTMLElement>document.querySelector(".mapty__distance");
 export default class LeafletMap {
   private _map: Map;
@@ -8,14 +8,10 @@ export default class LeafletMap {
     this.Latitude = Latitude;
     this.Longitude = Longitude;
     this._map = L.map("map");
-    this._init();
     this.loadMap();
+    form.addEventListener("submit", this.formSubmit.bind(this));
   }
-  private _init() {
-    document.addEventListener("submit", (e) => {
-      this.formSubmit(e);
-    });
-  }
+
   private loadMap(): void {
     this._map.setView([<number>this.Latitude, <number>this.Longitude], 13);
 
@@ -34,18 +30,11 @@ export default class LeafletMap {
     });
   }
 
-  formSubmit(e: any) {
+  formSubmit(e: SubmitEvent) {
     e.preventDefault();
-
-    if (!e.target.match(".mapty__form")) return;
-    if (!form.classList.contains("hidden")) {
-    }
   }
   private _showForm() {
     form.classList.remove("hidden");
     distance.focus();
   }
 }
-// document.addEventListener("submit", (e: any) => {
-//   new LeafletMap().formSubmit(e);
-// });

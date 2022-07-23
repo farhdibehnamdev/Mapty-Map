@@ -50,6 +50,9 @@
     background-color: var(--form-control-color);
     transition: all 0.2s;
   }
+  &__btn {
+    display: none;
+  }
   &__main {
     height: 100%;
     flex: 1;
