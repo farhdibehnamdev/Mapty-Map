@@ -1,7 +1,8 @@
-import L, { Map } from "leaflet";
+import L, { latLng, Map } from "leaflet";
 import { Workout } from "./workout";
 import { Running } from "./running";
 import { Cycling } from "./Cycling";
+type CyclingRunning = Cycling | Running;
 const form = <HTMLFormElement>document.querySelector("#form");
 const typeWorkout = <HTMLSelectElement>(
   document.querySelector(".mapty__type-workout")
@@ -14,7 +15,7 @@ const dynamicElement = <HTMLInputElement>(
 
 export default class LeafletMap {
   private _map: Map;
-  private _workouts: Workout[];
+  private _workouts: CyclingRunning[];
   constructor(private Latitude?: number, private Longitude?: number) {
     this.Latitude = Latitude;
     this.Longitude = Longitude;
@@ -41,12 +42,45 @@ export default class LeafletMap {
       .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
       .openPopup();
 
-    this._map.on("click", () => {
+    this._map.on("click", (e) => {
+      const coord = e.latlng;
+      this.Latitude = coord.lat;
+      this.Longitude = coord.lng;
       this._showForm();
+      // this._renderWorkouts();
     });
   }
 
-  private _selectWorkoutHandler() {
+  private _makeWorkoutUI(workout: CyclingRunning): string {
+    return `<div class="workout workout--${workout.typeWorkout} hidden">
+    <h2 class="workout__title">${workout.typeWorkout} on July 30</h2>
+    <div class="workout__details">
+      <span class="workout__icon">🏃‍♂️</span>
+      <span class="workout__value">${workout.distance}</span>
+      <span class="workout__unit">KM</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">⏱</span>
+      <span class="workout__value">30</span>
+      <span class="workout__unit">MIN</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">⚡</span>
+      <span class="workout__value">0.1</span>
+      <span class="workout__unit">MIN/KM</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">🦶</span>
+      <span class="workout__value">${workout}</span>
+      <span class="workout__unit">SPM</span>
+    </div>
+  </div>`;
+  }
+
+  private _renderWorkouts() {
+    this._workouts.map((workout) => this._makeWorkoutUI(workout));
+  }
+  private _selectWorkoutHandler(): void {
     if (typeWorkout.value === "running") {
       if (!dynamicElement.classList.contains("mapty__cadence")) {
         this._updateInputBasedOnType(
@@ -67,7 +101,8 @@ export default class LeafletMap {
       }
     }
   }
-  formSubmit(e: SubmitEvent) {
+
+  formSubmit(e: SubmitEvent): void {
     e.preventDefault();
     this._newWorkout();
     console.log(this._workouts);
@@ -78,7 +113,7 @@ export default class LeafletMap {
     placeHolderValue: string,
     removeClass: string,
     addClass: string
-  ) {
+  ): void {
     const elem: HTMLElement | any = dynamicElement.closest(".mapty__row");
     const labelEl: HTMLLabelElement | any = elem?.querySelector("label");
     labelEl.textContent = lblName;
@@ -106,7 +141,7 @@ export default class LeafletMap {
       this._workouts.push(cycling);
     }
   }
-  private _showForm() {
+  private _showForm(): void {
     form.classList.remove("hidden");
     distance.focus();
   }
