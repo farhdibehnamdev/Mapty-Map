@@ -8,11 +8,10 @@ const typeWorkout = <HTMLSelectElement>(
 );
 const distance = <HTMLInputElement>document.querySelector(".mapty__distance");
 const duration = <HTMLInputElement>document.querySelector(".mapty__duration");
-const cadence = <HTMLInputElement>document.querySelector(".mapty__cadence");
-const elevGain = <HTMLInputElement>document.querySelector(".mapty__elevGain");
-const checkElementType = <HTMLInputElement>(
-  document.querySelector(".type--cadence")
+const dynamicElement = <HTMLInputElement>(
+  document.querySelector(".mapty__cadence")
 );
+
 export default class LeafletMap {
   private _map: Map;
   private _workouts: Workout[];
@@ -22,6 +21,10 @@ export default class LeafletMap {
     this._map = L.map("map");
     this.loadMap();
     this._workouts = [];
+    typeWorkout.addEventListener(
+      "change",
+      this._selectWorkoutHandler.bind(this)
+    );
     form.addEventListener("submit", this.formSubmit.bind(this));
   }
 
@@ -43,43 +46,62 @@ export default class LeafletMap {
     });
   }
 
+  private _selectWorkoutHandler() {
+    if (typeWorkout.value === "running") {
+      if (!dynamicElement.classList.contains("mapty__cadence")) {
+        this._updateInputBasedOnType(
+          "Cadence",
+          "step/min",
+          "mapty__elev",
+          "mapty__cadence"
+        );
+      }
+    } else if (typeWorkout.value === "cycling") {
+      if (!dynamicElement.classList.contains("mapty__elev")) {
+        this._updateInputBasedOnType(
+          "Elev Gain",
+          "meters",
+          "mapty__cadence",
+          "mapty__elev"
+        );
+      }
+    }
+  }
   formSubmit(e: SubmitEvent) {
     e.preventDefault();
     this._newWorkout();
     console.log(this._workouts);
   }
 
-  private _newWorkout() {
+  private _updateInputBasedOnType(
+    lblName: string,
+    placeHolderValue: string,
+    removeClass: string,
+    addClass: string
+  ) {
+    const elem: HTMLElement | any = dynamicElement.closest(".mapty__row");
+    const labelEl: HTMLLabelElement | any = elem?.querySelector("label");
+    labelEl.textContent = lblName;
+    dynamicElement.classList.remove(removeClass);
+    dynamicElement.classList.add(addClass);
+    dynamicElement.placeholder = placeHolderValue;
+  }
+
+  private _newWorkout(): void {
     if (typeWorkout.value === "running") {
-      if (!cadence.value) {
-        const elem: HTMLElement | any = cadence.closest(".mapty__row");
-        const labelEl: HTMLLabelElement | any = elem?.querySelector("label");
-        labelEl.textContent = "Cadence";
-        cadence.classList.remove("mapty__elev");
-        cadence.classList.add("mapty__cadence");
-        cadence.placeholder = "step/min";
-      }
       const running = new Running(
         typeWorkout.value,
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),
-        Number.parseInt(cadence.value)
+        Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(running);
     } else if (typeWorkout.value === "cycling") {
-      if (cadence.value) {
-        const elem: HTMLElement | any = cadence.closest(".mapty__row");
-        const labelEl: HTMLLabelElement | any = elem?.querySelector("label");
-        labelEl.textContent = "Elev Gain";
-        cadence.classList.remove("mapty__cadence");
-        cadence.classList.add("mapty__elev");
-        cadence.placeholder = "meters";
-      }
       const cycling = new Cycling(
         typeWorkout.value,
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),
-        Number.parseInt(elevGain.value)
+        Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(cycling);
     }
