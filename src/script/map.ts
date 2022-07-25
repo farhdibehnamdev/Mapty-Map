@@ -18,12 +18,27 @@ const dynamicElement = <HTMLInputElement>(
 export default class LeafletMap {
   private _map: Map;
   private _workouts: CyclingRunning[];
+  private _months: string[];
   constructor(private Latitude?: number, private Longitude?: number) {
     this.Latitude = Latitude;
     this.Longitude = Longitude;
     this._map = L.map("map");
     this.loadMap();
     this._workouts = [];
+    this._months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
     typeWorkout.addEventListener(
       "change",
       this._selectWorkoutHandler.bind(this)
@@ -54,9 +69,13 @@ export default class LeafletMap {
 
   private _makeWorkoutUI(workout: CyclingRunning): string {
     return `<div class="workout workout--${workout.typeWorkout}">
-    <h2 class="workout__title">${workout.typeWorkout} on July 30</h2>
+    <h2 class="workout__title">${
+      workout.typeWorkout
+    } on ${this._getCurrentDate()}</h2>
     <div class="workout__details">
-      <span class="workout__icon">🏃‍♂️</span>
+      <span class="workout__icon">${
+        workout.typeWorkout === "running" ? "🏃‍♂️" : "🚴‍♀️"
+      }</span>
       <span class="workout__value">${workout.distance}</span>
       <span class="workout__unit">KM</span>
     </div>
@@ -93,7 +112,7 @@ export default class LeafletMap {
 
   private _renderWorkouts() {
     workouts.innerHTML += this._makeWorkoutUI(
-      this._workouts.at(this._workouts.length - 1) as CyclingRunning
+      <CyclingRunning>this._workouts.at(this._workouts.length - 1)
     );
   }
   private _selectWorkoutHandler(): void {
@@ -138,13 +157,24 @@ export default class LeafletMap {
     dynamicElement.classList.add(addClass);
     dynamicElement.placeholder = placeHolderValue;
   }
-
+  private _getCurrentDate(): string {
+    const date = new Date();
+    const nameOfMonth: string = this._months[date.getMonth() + 1];
+    const dayNumber = String(date.getDate()).padStart(2, "0");
+    return `${nameOfMonth} ${dayNumber}`;
+  }
   private _newWorkout(): void {
+    const coord: LngLatLoc = {
+      Latitude: this.Latitude,
+      Longitude: this.Longitude,
+    };
     if (typeWorkout.value === "running") {
       const running = new Running(
         typeWorkout.value,
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),
+        coord,
+        this._getCurrentDate(),
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(running);
@@ -153,6 +183,8 @@ export default class LeafletMap {
         typeWorkout.value,
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),
+        coord,
+        this._getCurrentDate(),
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(cycling);
