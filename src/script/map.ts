@@ -56,7 +56,16 @@ export default class LeafletMap {
 
     L.marker([<number>this.Latitude, <number>this.Longitude])
       .addTo(this._map)
-      .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+          className: `running--popup`,
+        })
+      )
+      .setPopupContent("Current User Location")
       .openPopup();
 
     this._map.on("click", (e) => {
@@ -157,12 +166,21 @@ export default class LeafletMap {
     dynamicElement.classList.add(addClass);
     dynamicElement.placeholder = placeHolderValue;
   }
-  private _newMarkerLocation(popupValue: string): void {
+  private _newMarkerLocation(type: string, popupValue: string): void {
     let newLatLng = new L.LatLng(<number>this.Latitude, <number>this.Longitude);
     L.marker([<number>this.Latitude, <number>this.Longitude])
       .addTo(this._map)
       .setLatLng(newLatLng)
-      .bindPopup(popupValue)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+          className: `${type}--popup`,
+        })
+      )
+      .setPopupContent(`${type === "running" ? "🏃‍♂️" : "🚴‍♀️"} ${popupValue}`)
       .openPopup();
   }
   private _getCurrentDate(): string {
@@ -186,7 +204,7 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(running);
-      this._newMarkerLocation(`Running on ${this._getCurrentDate()}`);
+      this._newMarkerLocation("running", `on ${this._getCurrentDate()}`);
     } else if (typeWorkout.value === "cycling") {
       const cycling = new Cycling(
         typeWorkout.value,
@@ -197,7 +215,7 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(cycling);
-      this._newMarkerLocation(`Cycling on ${this._getCurrentDate()}`);
+      this._newMarkerLocation("cycling", `on ${this._getCurrentDate()}`);
     }
     this._hideForm();
   }
