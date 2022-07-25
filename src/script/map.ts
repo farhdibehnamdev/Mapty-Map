@@ -2,8 +2,10 @@ import L, { latLng, Map } from "leaflet";
 import { Workout } from "./workout";
 import { Running } from "./running";
 import { Cycling } from "./Cycling";
-type CyclingRunning = Cycling | Running;
+type CyclingRunning = Cycling & Running;
+
 const form = <HTMLFormElement>document.querySelector("#form");
+const workouts = <HTMLElement>document.querySelector(".workouts");
 const typeWorkout = <HTMLSelectElement>(
   document.querySelector(".mapty__type-workout")
 );
@@ -47,12 +49,11 @@ export default class LeafletMap {
       this.Latitude = coord.lat;
       this.Longitude = coord.lng;
       this._showForm();
-      // this._renderWorkouts();
     });
   }
 
   private _makeWorkoutUI(workout: CyclingRunning): string {
-    return `<div class="workout workout--${workout.typeWorkout} hidden">
+    return `<div class="workout workout--${workout.typeWorkout}">
     <h2 class="workout__title">${workout.typeWorkout} on July 30</h2>
     <div class="workout__details">
       <span class="workout__icon">🏃‍♂️</span>
@@ -61,24 +62,39 @@ export default class LeafletMap {
     </div>
     <div class="workout__details">
       <span class="workout__icon">⏱</span>
-      <span class="workout__value">30</span>
+      <span class="workout__value">${workout.duration}</span>
       <span class="workout__unit">MIN</span>
     </div>
+
     <div class="workout__details">
       <span class="workout__icon">⚡</span>
-      <span class="workout__value">0.1</span>
-      <span class="workout__unit">MIN/KM</span>
+      <span class="workout__value">${
+        workout.typeWorkout === "running"
+          ? workout.calcPace?.()
+          : workout.calcSpeed?.()
+      }</span>
+      <span class="workout__unit">${
+        workout.typeWorkout === "running" ? "MIN/KM" : "KM/H"
+      }</span>
     </div>
     <div class="workout__details">
-      <span class="workout__icon">🦶</span>
-      <span class="workout__value">${workout}</span>
-      <span class="workout__unit">SPM</span>
-    </div>
+    <span class="workout__icon">${
+      workout.typeWorkout === "running" ? "🦶" : "⛰"
+    }</span>
+    <span class="workout__value">${
+      workout.typeWorkout === "running" ? workout.cadence : workout.elevGain
+    }</span>
+    <span class="workout__unit">${
+      workout.typeWorkout === "running" ? "SPM" : "M"
+    }</span>
+  </div>
   </div>`;
   }
 
   private _renderWorkouts() {
-    this._workouts.map((workout) => this._makeWorkoutUI(workout));
+    workouts.innerHTML += this._makeWorkoutUI(
+      this._workouts.at(this._workouts.length - 1) as CyclingRunning
+    );
   }
   private _selectWorkoutHandler(): void {
     if (typeWorkout.value === "running") {
@@ -106,6 +122,7 @@ export default class LeafletMap {
     e.preventDefault();
     this._newWorkout();
     console.log(this._workouts);
+    this._renderWorkouts();
   }
 
   private _updateInputBasedOnType(
