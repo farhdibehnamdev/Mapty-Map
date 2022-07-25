@@ -157,6 +157,14 @@ export default class LeafletMap {
     dynamicElement.classList.add(addClass);
     dynamicElement.placeholder = placeHolderValue;
   }
+  private _newMarkerLocation(popupValue: string): void {
+    let newLatLng = new L.LatLng(<number>this.Latitude, <number>this.Longitude);
+    L.marker([<number>this.Latitude, <number>this.Longitude])
+      .addTo(this._map)
+      .setLatLng(newLatLng)
+      .bindPopup(popupValue)
+      .openPopup();
+  }
   private _getCurrentDate(): string {
     const date = new Date();
     const nameOfMonth: string = this._months[date.getMonth() + 1];
@@ -178,6 +186,7 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(running);
+      this._newMarkerLocation(`Running on ${this._getCurrentDate()}`);
     } else if (typeWorkout.value === "cycling") {
       const cycling = new Cycling(
         typeWorkout.value,
@@ -188,10 +197,15 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(cycling);
+      this._newMarkerLocation(`Cycling on ${this._getCurrentDate()}`);
     }
+    this._hideForm();
   }
   private _showForm(): void {
     form.classList.remove("hidden");
     distance.focus();
+  }
+  private _hideForm(): void {
+    form.classList.add("hidden");
   }
 }
