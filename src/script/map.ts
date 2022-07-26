@@ -1,7 +1,7 @@
-import L, { latLng, Map } from "leaflet";
-import { Workout } from "./workout";
+import L, { Map } from "leaflet";
 import { Running } from "./running";
 import { Cycling } from "./Cycling";
+import Utility from "../assets/libs/utility";
 type CyclingRunning = Cycling & Running;
 
 const form = <HTMLFormElement>document.querySelector("#form");
@@ -43,7 +43,7 @@ export default class LeafletMap {
       "change",
       this._selectWorkoutHandler.bind(this)
     );
-    form.addEventListener("submit", this.formSubmit.bind(this));
+    form.addEventListener("submit", this._formSubmit.bind(this));
   }
 
   private loadMap(): void {
@@ -146,7 +146,7 @@ export default class LeafletMap {
     }
   }
 
-  formSubmit(e: SubmitEvent): void {
+  private _formSubmit(e: SubmitEvent): void {
     e.preventDefault();
     this._newWorkout();
     console.log(this._workouts);
@@ -196,6 +196,7 @@ export default class LeafletMap {
     };
     if (typeWorkout.value === "running") {
       const running = new Running(
+        Utility.generatorId(),
         typeWorkout.value,
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),
@@ -207,6 +208,7 @@ export default class LeafletMap {
       this._newMarkerLocation("running", `on ${this._getCurrentDate()}`);
     } else if (typeWorkout.value === "cycling") {
       const cycling = new Cycling(
+        Utility.generatorId(),
         typeWorkout.value,
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),

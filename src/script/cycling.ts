@@ -3,6 +3,7 @@ import { Workout } from "./workout";
 export class Cycling extends Workout {
   private speed?: number = 0;
   constructor(
+    public id: string,
     public typeWorkout: string,
     public distance: number,
     public duration: number,
@@ -10,7 +11,7 @@ export class Cycling extends Workout {
     public date: string,
     public elevGain?: number
   ) {
-    super(typeWorkout, distance, duration, coords, date);
+    super(id, typeWorkout, distance, duration, coords, date);
     this.calcSpeed?.();
   }
 
