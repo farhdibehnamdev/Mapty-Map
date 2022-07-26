@@ -1,7 +1,7 @@
 import { Workout } from "./workout";
 
 export class Running extends Workout {
-  private pace?: number = 0;
+  pace?: number;
   constructor(
     public id: string,
     public typeWorkout: string,
@@ -12,11 +12,10 @@ export class Running extends Workout {
     public cadence?: number
   ) {
     super(typeWorkout, distance, duration, coords, date);
-    this.calcPace?.();
+    this.pace = this.calcPace?.();
   }
 
   calcPace?(): number {
-    this.pace = this.duration / this.distance;
-    return this.pace;
+    return this.duration / this.distance;
   }
 }
