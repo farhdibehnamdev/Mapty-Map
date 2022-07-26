@@ -44,6 +44,8 @@ export default class LeafletMap {
       this._selectWorkoutHandler.bind(this)
     );
     form.addEventListener("submit", this._formSubmit.bind(this));
+    this._getDataFromStorage();
+    this._renderWorkouts();
   }
 
   private loadMap(): void {
@@ -75,7 +77,14 @@ export default class LeafletMap {
       this._showForm();
     });
   }
-
+  private _getDataFromStorage(): void {
+    if (localStorage.getItem("workouts")) {
+      this._workouts.push(JSON.parse(localStorage.getItem("workouts")!));
+    }
+  }
+  private _saveDataToStorage(workout: CyclingRunning): void {
+    localStorage.setItem("workouts", JSON.stringify(workout));
+  }
   private _makeWorkoutUI(workout: CyclingRunning): string {
     return `<div class="workout workout--${workout.typeWorkout}">
     <h2 class="workout__title">${
@@ -118,11 +127,12 @@ export default class LeafletMap {
   </div>
   </div>`;
   }
-
+  // private _render()
   private _renderWorkouts() {
-    workouts.innerHTML += this._makeWorkoutUI(
-      <CyclingRunning>this._workouts.at(this._workouts.length - 1)
-    );
+    if (this._workouts.length > 0)
+      workouts.innerHTML += this._makeWorkoutUI(
+        <CyclingRunning>this._workouts.at(this._workouts.length - 1)
+      );
   }
   private _selectWorkoutHandler(): void {
     if (typeWorkout.value === "running") {
@@ -194,10 +204,12 @@ export default class LeafletMap {
       Latitude: this.Latitude,
       Longitude: this.Longitude,
     };
+    const id = Utility.generatorId();
     if (typeWorkout.value === "running") {
       const running = new Running(
-        Utility.generatorId(),
-        typeWorkout.value,
+        id,
+        // typeWorkout.value,
+        "running",
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),
         coord,
@@ -205,11 +217,14 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(running);
+      this._saveDataToStorage(running);
       this._newMarkerLocation("running", `on ${this._getCurrentDate()}`);
     } else if (typeWorkout.value === "cycling") {
+      console.log("booghhh :::", typeWorkout.value);
+
       const cycling = new Cycling(
-        Utility.generatorId(),
-        typeWorkout.value,
+        id,
+        "cycling",
         Number.parseInt(distance.value),
         Number.parseInt(duration.value),
         coord,
@@ -217,6 +232,7 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(cycling);
+      this._saveDataToStorage(cycling);
       this._newMarkerLocation("cycling", `on ${this._getCurrentDate()}`);
     }
     this._hideForm();

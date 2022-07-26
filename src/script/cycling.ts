@@ -11,7 +11,7 @@ export class Cycling extends Workout {
     public date: string,
     public elevGain?: number
   ) {
-    super(id, typeWorkout, distance, duration, coords, date);
+    super(typeWorkout, distance, duration, coords, date);
     this.calcSpeed?.();
   }
 

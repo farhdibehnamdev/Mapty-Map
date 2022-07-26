@@ -11,7 +11,7 @@ export class Running extends Workout {
     public date: string,
     public cadence?: number
   ) {
-    super(id, typeWorkout, distance, duration, coords, date);
+    super(typeWorkout, distance, duration, coords, date);
     this.calcPace?.();
   }
 
