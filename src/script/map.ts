@@ -45,7 +45,7 @@ export default class LeafletMap {
     );
     form.addEventListener("submit", this._formSubmit.bind(this));
     this._getDataFromStorage();
-    this._renderWorkouts();
+    this._renderAllWorkout();
   }
 
   private loadMap(): void {
@@ -77,12 +77,24 @@ export default class LeafletMap {
       this._showForm();
     });
   }
+  private _renderAllWorkout() {
+    this._workouts.forEach((work) => {
+      this.Latitude = work.coords.Latitude;
+      this.Longitude = work.coords.Longitude;
+      this._newMarkerLocation(
+        work.typeWorkout,
+        `${work.typeWorkout} on ${work.date}`
+      );
+      workouts.innerHTML += this._makeWorkoutUI(<CyclingRunning>work);
+    });
+  }
   private _getDataFromStorage(): void {
     if (localStorage.getItem("workouts")) {
-      this._workouts.push(JSON.parse(localStorage.getItem("workouts")!));
+      this._workouts.length = 0;
+      this._workouts = JSON.parse(localStorage.getItem("workouts")!);
     }
   }
-  private _saveDataToStorage(workout: CyclingRunning): void {
+  private _saveDataToStorage(workout: CyclingRunning[]): void {
     localStorage.setItem("workouts", JSON.stringify(workout));
   }
   private _makeWorkoutUI(workout: CyclingRunning): string {
@@ -107,8 +119,8 @@ export default class LeafletMap {
       <span class="workout__icon">⚡</span>
       <span class="workout__value">${
         workout.typeWorkout === "running"
-          ? workout.calcPace?.()
-          : workout.calcSpeed?.()
+          ? workout.pace?.toFixed(1)
+          : workout.speed?.toFixed(1)
       }</span>
       <span class="workout__unit">${
         workout.typeWorkout === "running" ? "MIN/KM" : "KM/H"
@@ -127,7 +139,6 @@ export default class LeafletMap {
   </div>
   </div>`;
   }
-  // private _render()
   private _renderWorkouts() {
     if (this._workouts.length > 0)
       workouts.innerHTML += this._makeWorkoutUI(
@@ -217,7 +228,7 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(running);
-      this._saveDataToStorage(running);
+      this._saveDataToStorage(this._workouts);
       this._newMarkerLocation("running", `on ${this._getCurrentDate()}`);
     } else if (typeWorkout.value === "cycling") {
       console.log("booghhh :::", typeWorkout.value);
@@ -232,7 +243,7 @@ export default class LeafletMap {
         Number.parseInt(dynamicElement.value)
       );
       this._workouts.push(cycling);
-      this._saveDataToStorage(cycling);
+      this._saveDataToStorage(this._workouts);
       this._newMarkerLocation("cycling", `on ${this._getCurrentDate()}`);
     }
     this._hideForm();
