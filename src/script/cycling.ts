@@ -16,7 +16,7 @@ export class Cycling extends Workout {
   }
 
   calcSpeed?(): number {
-    this.speed = this.distance / (this.duration / 60);
+    this.speed = parseInt((this.distance / (this.duration / 60)).toFixed(1));
     console.log("speed ::", this.speed);
     return this.speed;
   }
